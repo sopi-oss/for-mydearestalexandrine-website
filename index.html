@@ -20,17 +20,16 @@
             background-color: var(--cream);
             color: var(--text-brown);
             overflow-x: hidden;
-            cursor: url('photo5.png'), auto;
+            /* Using heart as cursor */
+            cursor: url('image_e8adfa.png'), auto;
         }
 
-        /* MUSIC OVERLAY - THIS FIXES THE SILENCE */
         #music-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: var(--cream); z-index: 9999;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
         }
 
-        /* YouTube Hidden Player */
         #yt-player { position: absolute; top: -9999px; left: -9999px; }
 
         .particle {
@@ -57,7 +56,6 @@
             max-width: 320px; box-shadow: 0 10px 20px rgba(0,0,0,0.05);
         }
 
-        /* GAME */
         #game-container {
             width: 90%; max-width: 500px; height: 350px; position: relative;
             background: white; border-radius: 20px; border: 3px solid var(--soft-pink); overflow: hidden;
@@ -83,7 +81,6 @@
             box-shadow: 0 15px 40px rgba(0,0,0,0.05); margin: 20px; border: 2px solid var(--soft-pink);
         }
 
-        /* Polaroid Camera Section */
         .camera-container {
             width: 300px; height: 180px; background: #333;
             border-radius: 20px 20px 5px 5px; position: relative;
@@ -113,7 +110,7 @@
 <body>
 
 <div id="music-overlay">
-    <img src="photo3.png" style="width:150px; margin-bottom:20px;">
+    <img src="image_e9aa36.png" style="width:150px; margin-bottom:20px;">
     <h2 style="font-family:'Dancing Script'; font-size:2rem;">Ready for your surprise?</h2>
     <button class="btn btn-yes" onclick="unlockMusic()">Open Surprise 💌</button>
 </div>
@@ -123,7 +120,7 @@
 </div>
 
 <section id="stage1" class="section active">
-    <img id="penguin" class="penguin-img" src="photo3.png">
+    <img id="penguin" class="penguin-img" src="image_e9aa36.png">
     <div class="bubble"><p id="penguin-text">Hi Alexandrine! Do you want to see your surprise? 🐧✨</p></div>
     <div style="display:flex; gap:15px;">
         <button class="btn btn-yes" onclick="startEverything()">Yes! 😍</button>
@@ -144,7 +141,7 @@
 </section>
 
 <section id="stage3" class="section">
-    <h1 style="font-family:'Poppins'; font-weight:600;">Catch 59 Hearts for the Surprise! ✨</h1>
+    <h1 style="font-family:'Poppins'; font-weight:600;">Catch 29 Hearts for the Surprise! ✨</h1>
     <div id="game-container"></div>
     <h2 id="score-text" style="margin-top:20px;">Score: 0</h2>
 </section>
@@ -158,7 +155,6 @@
 </section>
 
 <script>
-    // LOAD YOUTUBE API
     var tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
     var firstScriptTag = document.getElementsByTagName('script')[0];
@@ -175,7 +171,7 @@
     }
 
     function unlockMusic() {
-        player.playVideo();
+        if(player) player.playVideo();
         document.getElementById('music-overlay').style.display = 'none';
     }
 
@@ -194,7 +190,8 @@
     }
 
     function sadPenguin() {
-        document.getElementById('penguin').src = "photo4.png";
+        // Updated filename
+        document.getElementById('penguin').src = "image_e9aa36.png";
         document.getElementById('penguin-text').innerText = "Oh... pinapaiyak mo naman ang penguin. ☹️";
         document.getElementById('no-btn').innerText = "Sige na nga, Yes na!";
         document.getElementById('no-btn').onclick = startEverything;
@@ -202,7 +199,8 @@
 
     function createParticle() {
         const p = document.createElement('img');
-        p.src = "photo5.png"; p.className = 'particle';
+        // Updated filename
+        p.src = "image_e8adfa.png"; p.className = 'particle';
         p.style.left = Math.random() * 100 + 'vw';
         p.style.width = (Math.random() * 20 + 15) + 'px';
         p.style.animationDuration = (Math.random() * 3 + 4) + 's';
@@ -215,9 +213,11 @@
     function startHeartGame() {
         const container = document.getElementById('game-container');
         function spawn() {
-            if (score >= 59) { nextStage(4); return; }
+            // Updated score limit to 29
+            if (score >= 29) { nextStage(4); return; }
             const h = document.createElement('img');
-            h.src = "photo5.png"; h.className = 'game-heart';
+            // Updated filename for game heart
+            h.src = "image_e8adfa.png"; h.className = 'game-heart';
             h.style.left = Math.random() * 70 + 15 + '%';
             h.style.top = Math.random() * 70 + 15 + '%';
             h.onclick = () => { 
@@ -229,7 +229,8 @@
             container.appendChild(h);
         }
         spawn();
-        setInterval(() => { if(score < 59 && container.children.length < 2) spawn(); }, 2000);
+        // Updated limit check to 29
+        setInterval(() => { if(score < 29 && container.children.length < 2) spawn(); }, 2000);
     }
 
     const message = `Mahal kong Alexandrine,
@@ -256,7 +257,8 @@
 
     window.addEventListener('mousemove', (e) => {
         const h = document.createElement('img');
-        h.src = "photo5.png"; h.className = 'cursor-trail';
+        // Updated filename for trail
+        h.src = "image_e8adfa.png"; h.className = 'cursor-trail';
         h.style.left = e.clientX + 'px'; h.style.top = e.clientY + 'px';
         document.body.appendChild(h);
         setTimeout(() => h.remove(), 700);
