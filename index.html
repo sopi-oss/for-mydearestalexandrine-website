@@ -20,15 +20,13 @@
             background-color: var(--cream);
             color: var(--text-brown);
             overflow-x: hidden;
-            /* Using your uploaded pixel heart for cursor */
-            cursor: url('image_e7d082.png'), auto;
+            /* CURSOR: photo5.png lowercase */
+            cursor: url('photo5.png'), auto;
         }
 
-        /* --- FALLING PARTICLES --- */
         .particle {
             position: fixed; top: -50px; z-index: 1;
             pointer-events: none; animation: fall linear forwards;
-            image-rendering: pixelated;
         }
         @keyframes fall {
             to { transform: translateY(110vh) rotate(360deg); opacity: 0; }
@@ -43,7 +41,6 @@
         .active { display: flex; animation: fadeIn 1s ease; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* PENGUIN ASSETS */
         .penguin-img { width: 220px; margin-bottom: 15px; border-radius: 20px; }
         .bubble {
             background: white; padding: 20px; border-radius: 25px;
@@ -51,7 +48,6 @@
             max-width: 320px; box-shadow: 0 10px 20px rgba(0,0,0,0.05);
         }
 
-        /* CAMERA BOX */
         .camera-container {
             width: 300px; height: 180px; background: #333;
             border-radius: 20px 20px 5px 5px; position: relative;
@@ -74,14 +70,13 @@
         .slide-out-1 { opacity: 1; transform: translateY(260px) rotate(-5deg); z-index: 10; }
         .slide-out-2 { opacity: 1; transform: translateY(530px) rotate(5deg); z-index: 10; }
 
-        /* GAME */
         #game-container {
             width: 90%; max-width: 500px; height: 350px; position: relative;
             background: white; border-radius: 20px; border: 3px solid var(--soft-pink); overflow: hidden;
         }
-        .game-heart { position: absolute; width: 45px; cursor: pointer; image-rendering: pixelated; }
+        /* GAME HEART: photo5.png lowercase */
+        .game-heart { position: absolute; width: 45px; cursor: pointer; }
 
-        /* BUTTONS */
         .btn { padding: 15px 35px; border-radius: 50px; border: none; cursor: pointer; font-weight: 600; transition: 0.3s; font-family: 'Poppins'; }
         .btn-yes { background: var(--valentine-red); color: white; }
         .btn-no { background: #ccc; color: #555; }
@@ -93,8 +88,8 @@
         }
         
         .cursor-trail {
-            position: fixed; pointer-events: none; width: 20px; z-index: 9999;
-            image-rendering: pixelated; animation: fadeOut 0.7s forwards;
+            position: fixed; pointer-events: none; width: 25px; z-index: 9999;
+            animation: fadeOut 0.7s forwards;
         }
         @keyframes fadeOut { to { opacity: 0; transform: scale(0.5) translateY(-20px); } }
     </style>
@@ -106,7 +101,7 @@
 </audio>
 
 <section id="stage1" class="section active">
-    <img id="penguin" class="penguin-img" src="image_e7d198.png">
+    <img id="penguin" class="penguin-img" src="photo3.png">
     <div class="bubble"><p id="penguin-text">Hi Alexandrine! Do you want to see your surprise? 🐧✨</p></div>
     <div style="display:flex; gap:15px;">
         <button class="btn btn-yes" onclick="startEverything()">Yes! 😍</button>
@@ -128,9 +123,9 @@
 </section>
 
 <section id="stage3" class="section">
-    <h1 style="font-family:'Poppins'; font-weight:600;">Catch 5 Moving Hearts! ❤️</h1>
+    <h1 style="font-family:'Poppins'; font-weight:600;">Catch 5 Moving Items! ✨</h1>
     <div id="game-container"></div>
-    <h2 id="score-text" style="margin-top:20px;">Hearts Caught: 0</h2>
+    <h2 id="score-text" style="margin-top:20px;">Score: 0</h2>
 </section>
 
 <section id="stage4" class="section">
@@ -144,15 +139,9 @@
 <script>
     const audio = document.getElementById("myAudio");
 
-    // This function forces the music to play when she clicks "Yes"
     function startEverything() {
-        audio.play().then(() => {
-            console.log("Music started!");
-        }).catch(err => {
-            console.log("Audio play failed: ", err);
-        });
+        audio.play().catch(err => console.log("Audio waiting..."));
         nextStage(2);
-        // Animate the camera polaroids
         setTimeout(() => document.getElementById('pol1').classList.add('slide-out-1'), 800);
         setTimeout(() => document.getElementById('pol2').classList.add('slide-out-2'), 2000);
         setTimeout(() => document.getElementById('cam-btn').style.display = 'block', 3500);
@@ -165,18 +154,18 @@
         if(num === 4) typeLetter();
     }
 
-    // Using photo4.png for Sad Penguin
     function sadPenguin() {
-        document.getElementById('penguin').src = "image_e7d45f.png";
+        /* SAD PENGUIN: photo4.png lowercase */
+        document.getElementById('penguin').src = "photo4.png";
         document.getElementById('penguin-text').innerText = "Oh... pinapaiyak mo naman ang penguin. ☹️";
         document.getElementById('no-btn').innerText = "Sige na nga, Yes na!";
         document.getElementById('no-btn').onclick = startEverything;
     }
 
-    // Falling Particles
     function createParticle() {
         const p = document.createElement('img');
-        p.src = "image_e7d082.png"; 
+        /* FALLING: photo5.png lowercase */
+        p.src = "photo5.png"; 
         p.className = 'particle';
         p.style.left = Math.random() * 100 + 'vw';
         p.style.width = (Math.random() * 20 + 15) + 'px';
@@ -186,20 +175,20 @@
     }
     setInterval(createParticle, 500);
 
-    // Heart Game
     let score = 0;
     function startHeartGame() {
         const container = document.getElementById('game-container');
         function spawn() {
             if (score >= 5) { nextStage(4); return; }
             const h = document.createElement('img');
-            h.src = "image_e7d082.png"; // Your Pixel Heart
+            /* GAME HEART: photo5.png lowercase */
+            h.src = "photo5.png"; 
             h.className = 'game-heart';
             h.style.left = Math.random() * 80 + 10 + '%';
             h.style.top = Math.random() * 80 + 10 + '%';
             h.onclick = () => { 
                 score++; 
-                document.getElementById('score-text').innerText = "Hearts Caught: " + score; 
+                document.getElementById('score-text').innerText = "Score: " + score; 
                 h.remove(); 
                 spawn(); 
             };
@@ -230,10 +219,10 @@ At gusto kong malaman mo ito nang malinaw, mahal kita sa paraang hindi nauubos. 
         }
     }
 
-    // Mouse Trail
+    /* MOUSE TRAIL: photo5.png lowercase */
     window.addEventListener('mousemove', (e) => {
         const h = document.createElement('img');
-        h.src = "image_e7d082.png";
+        h.src = "photo5.png";
         h.className = 'cursor-trail';
         h.style.left = e.clientX + 'px'; h.style.top = e.clientY + 'px';
         document.body.appendChild(h);
