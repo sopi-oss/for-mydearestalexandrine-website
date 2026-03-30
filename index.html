@@ -20,15 +20,18 @@
             background-color: var(--cream);
             color: var(--text-brown);
             overflow-x: hidden; scroll-behavior: smooth;
-            cursor: url('https://cur.cursors-4u.net/symbols/sym-9/sym847.cur'), auto;
+            /* Using the Pixel Heart as the main cursor fallback */
+            cursor: url('https://i.imgur.com/vHInIu7.png') 16 16, auto;
         }
 
+        /* --- LIGHT BACKGROUND DECOR --- */
         .bg-dots {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-image: radial-gradient(#ffcad4 1px, transparent 1px);
             background-size: 30px 30px; z-index: -1; opacity: 0.5;
         }
 
+        /* --- SECTIONS --- */
         .section {
             min-height: 100vh; display: none;
             flex-direction: column; justify-content: center;
@@ -38,94 +41,144 @@
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* --- STAGE 1: PENGUIN --- */
+        .penguin-container { display: flex; flex-direction: column; align-items: center; }
+        /* Using the HAPPY Penguin face */
         .penguin-img { width: 180px; margin-bottom: 10px; }
+        
         .bubble {
             background: white; color: var(--text-brown); padding: 20px;
             border-radius: 25px; border: 3px solid var(--soft-pink);
-            margin-bottom: 25px; max-width: 320px;
+            position: relative; margin-bottom: 25px;
+            max-width: 320px; box-shadow: 0 8px 15px rgba(0,0,0,0.05);
         }
 
+        /* --- STAGE 2: PHOTOBOOTH --- */
         .polaroid {
             background: white; padding: 12px 12px 35px 12px;
             transform: rotate(-2deg); transition: 0.3s;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.08); border: 1px solid #eee; margin: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.08); border: 1px solid #eee;
+            margin: 10px;
         }
         .polaroid img { width: 220px; height: 280px; object-fit: cover; }
+        .polaroid:hover { transform: scale(1.05) rotate(0deg); }
 
+        /* --- STAGE 3: GAME --- */
         #game-container {
             width: 90%; max-width: 500px; height: 350px; position: relative;
-            background: white; border-radius: 20px; border: 3px solid var(--soft-pink); overflow: hidden;
+            background: white; border-radius: 20px;
+            border: 3px solid var(--soft-pink); overflow: hidden;
         }
-        .pixel-heart { position: absolute; width: 40px; cursor: pointer; image-rendering: pixelated; }
+        .pixel-heart {
+            position: absolute; width: 40px; cursor: pointer;
+            image-rendering: pixelated; /* Makes it look like the provided heart */
+        }
 
+        /* --- STAGE 4: BOUQUET & LETTER --- */
         .letter-card {
             background: white; color: var(--text-brown);
             padding: 35px; border-radius: 30px; max-width: 600px;
-            text-align: left; line-height: 1.8; border: 2px solid var(--soft-pink);
-            margin: 20px;
+            text-align: left; line-height: 1.8; box-shadow: 0 15px 40px rgba(0,0,0,0.05);
+            margin-top: 30px; border: 2px solid var(--soft-pink);
         }
+        iframe { width: 100%; height: 550px; border: 4px solid white; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
 
-        iframe { width: 100%; height: 550px; border: 4px solid white; border-radius: 20px; }
-
-        .btn { padding: 12px 30px; border-radius: 15px; border: none; cursor: pointer; font-weight: 600; font-family: 'Poppins'; }
+        /* --- BUTTONS --- */
+        .btn-group { display: flex; gap: 15px; }
+        .btn {
+            padding: 12px 30px; border-radius: 15px; border: none;
+            cursor: pointer; font-weight: 600; transition: 0.2s;
+            font-family: 'Poppins'; font-size: 1rem;
+        }
         .btn-yes { background: var(--valentine-red); color: white; }
         .btn-no { background: #d3d3d3; color: #555; }
+        .btn:hover { transform: scale(1.05); filter: brightness(1.1); }
 
+        /* --- CURSOR TRAIL: Using your Pixel Heart --- */
         .cursor-heart {
-            position: fixed; pointer-events: none; width: 20px; z-index: 9999;
-            image-rendering: pixelated; animation: heart-fade 0.7s forwards;
+            position: fixed; pointer-events: none; width: 20px;
+            z-index: 9999; transform: translate(-50%, -50%);
+            /* Ensures crisp pixel look */
+            image-rendering: pixelated;
+            animation: heart-fade 0.7s forwards;
         }
-        @keyframes heart-fade { 0% { opacity: 1; } 100% { transform: translateY(-50px); opacity: 0; } }
+        @keyframes heart-fade {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            100% { transform: translate(-50%, -150%) scale(0.6); opacity: 0; }
+        }
     </style>
 </head>
 <body>
 
 <div class="bg-dots"></div>
 
+<div style="position:fixed; bottom:20px; right:20px; z-index:1000; cursor:pointer;" onclick="toggleMusic()">🎵</div>
 <audio id="myAudio" loop>
   <source src="music.mp3" type="audio/mpeg">
 </audio>
 
 <section id="stage1" class="section active">
-    <img id="penguin" class="penguin-img" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJueGZueXF4ZzR6NHJueGZueXF4ZzR6NHJueGZueXF4ZzR6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1z/L4lvBpHFmEofWvXpW9/giphy.gif">
-    <div class="bubble"><p id="penguin-text">Hi Alexandrine! Do you want to see your surprise? 🐧✨</p></div>
-    <div style="display:flex; gap:10px;">
-        <button class="btn btn-yes" onclick="startExperience()">Yes! 😍</button>
-        <button id="no-btn" class="btn btn-no" onclick="sadPenguin()">No ☹️</button>
+    <div class="penguin-container">
+        <img id="penguin" class="penguin-img" src="https://i.imgur.com/kS5G19Y.png" alt="Happy Penguin">
+        <div class="bubble">
+            <p id="penguin-text">Hi Alexandrine! I'm Sopi's little helper. Do you want to see the surprise he made for you? 🐧✨</p>
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-yes" onclick="startJourney()">Yes! 😍</button>
+            <button id="no-btn" class="btn btn-no" onclick="sadPenguin()">No ☹️</button>
+        </div>
     </div>
 </section>
 
 <section id="stage2" class="section">
-    <h1 style="font-family:'Dancing Script'; font-size:3.5rem; color:var(--valentine-red);">Our Moments 📸</h1>
-    <div style="display:flex; flex-wrap:wrap; justify-content:center;">
-        <div class="polaroid"><img src="photo1.jpg"></div>
-        <div class="polaroid"><img src="photo2.jpg"></div>
+    <h1 style="font-family: 'Dancing Script'; font-size: 3.5rem; color: var(--valentine-red);">Our Moments 📸</h1>
+    <div style="display: flex; flex-wrap: wrap; justify-content: center;">
+        <div class="polaroid"><img src="photo1.jpg" alt="Us 1"></div>
+        <div class="polaroid"><img src="photo2.jpg" alt="Us 2"></div>
     </div>
-    <br><button class="btn btn-yes" onclick="nextStage(3)">Continue? ✨</button>
+    <br>
+    <button class="btn btn-yes" onclick="nextStage(3)">Continue? ✨</button>
 </section>
 
 <section id="stage3" class="section">
-    <h1 style="font-family:'Playfair Display'; color:var(--valentine-red);">Catch the Hearts! ❤️</h1>
+    <h1 style="font-family: 'Playfair Display'; color: var(--valentine-red);">Catch the Hearts! ❤️</h1>
+    <p>Click 5 moving hearts to unlock your gift!</p>
     <div id="game-container"></div>
     <h2 id="score-text">Hearts Caught: 0</h2>
 </section>
 
 <section id="stage4" class="section">
-    <h1 style="font-family:'Dancing Script'; font-size:3rem; color:var(--valentine-red);">For You, Alexandrine 💐</h1>
+    <h1 style="font-family: 'Dancing Script'; font-size: 3rem; color: var(--valentine-red);">A Gift for You 💐</h1>
     <iframe src="https://digibouquet.net/create-bouquet?b=JTdCJTIyZiUyMiUzQSU1QiUyMnJvc2UlMjIlMkMlMjJwZW9ueSUyMiUyQyUyMnR1bGlwJTIyJTJDJTIyZGFpc3klMjIlMkMlMjJsaWx5JTIyJTJDJTIyb3JjaGlkJTIyJTJDJTIyY2FtZWxsaWElMjIlMkMlMjJsb3R1cyUyMiU1RCUyQyUyMmclMjIlM0ElMjJncmVlbmVyeTQlMjIlMkMlMjJjJTIyJTNBJTIydG9ybi12aW50YWdlJTIyJTJDJTIydG8lMjIlM0ElMjJteSUyMGRlYXJlc3QlMjBBbGV4YW5kcmluZSUyMiUyQyUyMmZyJTIyJTNBJTIyU29waSUyMiUyQyUyMm0lMjIlM0ElMjJNYWhhbCUyMG5hJTIwbWFoYWwlMjBraXRhLiUyMFdhbGFuZyUyMGR1bG8uJTIwJTNBKSUyMiUyQyUyMmJnJTIyJTNBJTIybGF2ZW5kZXItZHJlYW0lMjIlN0Q="></iframe>
+    
     <div class="letter-card">
-        <p id="letter-content" style="white-space: pre-wrap;"></p>
+        <h2 style="font-family: 'Dancing Script'; font-size: 2rem; color: var(--valentine-red);">Mahal kong Alexandrine,</h2>
+        <p id="letter-content"></p>
     </div>
 </section>
 
 <script>
+    // Embedded link to your Pixel Heart from the prompt
+    const pixelHeartImg = "https://i.imgur.com/vHInIu7.png";
+
+    // Embedded links to your Penguin faces
+    const happyPenguinImg = "https://i.imgur.com/kS5G19Y.png";
+    const sadPenguinFaceImg = "https://i.imgur.com/L1L1v4A.png"; // Your sad penguin face image
+
     const audio = document.getElementById("myAudio");
 
-    function startExperience() {
-        audio.play().catch(e => console.log("Music blocked until click"));
+    function toggleMusic() {
+        if (audio.paused) audio.play();
+        else audio.pause();
+    }
+
+    // Start Journey and play music
+    function startJourney() {
+        audio.play().catch(e => console.log("Audio blocked until interaction"));
         nextStage(2);
     }
 
+    // Navigation
     function nextStage(num) {
         document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
         document.getElementById('stage' + num).classList.add('active');
@@ -133,54 +186,67 @@
         if(num === 4) typeLetter();
     }
 
+    // Sad Penguin Logic: Switches to the Sad Penguin face image
     function sadPenguin() {
-        document.getElementById('penguin').src = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbmZ0ZzVqbmZ0ZzVqbmZ0ZzVqbmZ0ZzVqbmZ0ZzVqbmZ0ZzVqJmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1z/OPWzhvH87K3S6v7X2r/giphy.gif";
-        document.getElementById('penguin-text').innerText = "The penguin is very sad now... ☹️";
+        // Change the source to your provided sad penguin image
+        document.getElementById('penguin').src = sadPenguinFaceImg;
+        document.getElementById('penguin-text').innerText = "Oh... okay. The penguin is very sad now... ☹️ (Go back?)";
         document.getElementById('no-btn').innerText = "Go Back";
         document.getElementById('no-btn').onclick = () => location.reload();
     }
 
+    // Heart Game Logic (Hearts now have your pixel appearance)
     let score = 0;
     function startHeartGame() {
         const container = document.getElementById('game-container');
         function spawn() {
             if (score >= 5) { nextStage(4); return; }
             const h = document.createElement('img');
-            h.src = "https://i.imgur.com/vHInIu7.png";
+            // Using your provided Pixel Heart Image shape
+            h.src = pixelHeartImg; 
             h.className = 'pixel-heart';
             h.style.left = Math.random() * 80 + 10 + '%';
             h.style.top = Math.random() * 80 + 10 + '%';
-            h.onclick = () => { score++; document.getElementById('score-text').innerText = "Score: " + score; h.remove(); spawn(); };
+            h.onclick = () => {
+                score++;
+                document.getElementById('score-text').innerText = "Hearts Caught: " + score;
+                h.remove();
+                spawn();
+            };
             container.appendChild(h);
         }
         spawn();
     }
 
-    const fullMessage = `Mahal kong Alexandrine,
+    // Typing Letter Content (Uncut and complete as requested)
+    const message = `Dalawang buwan na ang lumipas, pero pakiramdam ko parang araw-araw pa rin akong nahuhulog sa’yo sa paraang hindi maingay, hindi pilit, kundi dahan-dahan at totoo. Habang tumatagal, mas lalo kitang nakikilala, at mas lalo ring lumalalim ang nadarama ko sa’yo. Hindi na ito simpleng nadarama lang, kundi isang desisyong paulit-ulit kong pinipili araw-araw: ikaw.
 
-Dalawang buwan na ang lumipas, pero pakiramdam ko parang araw-araw pa rin akong nahuhulog sa’yo sa paraang hindi maingay, hindi pilit, kundi dahan-dahan at totoo. Habang tumatagal, mas lalo kitang nakikilala, at mas lalo ring lumalalim ang nadarama ko sa’yo. Hindi na ito simpleng nadarama lang, kundi isang desisyong paulit-ulit kong pinipili araw-araw: ikaw.
+Salamat sa pagmamahal mo na hindi laging sinisigaw, pero laging nararamdaman. Sa mga maliliit mong ginagawa na madalas hindi napapansin ng iba pero sobrang laki para sa akin. Sa pagtingin mo sa akin kahit pagod ka na, sa pasensya mo kahit minsan hindi ako madaling intindihin, at sa pagpili mong manatili kahit hindi perpekto ang lahat. Nakikita ko lahat ‘yon. At sana alam mo kung gaano akong nagpapasalamat sa Diyos dahil binigyan niya ako ng pagkakataong mahalin ka sa buhay na ito.
 
-Salamat sa pagmamahal mo na hindi laging sinisigaw, pero laging nararamdaman. Sa mga maliliit mong ginagawa na madalas hindi napapansin ng iba pero sobrang laki para sa akin. Sa pagtingin mo sa akin kahit pagod ka na, sa pasensya mo kahit minsan hindi ako madaling intindihin, at sa pagpili mong manatili kahit hindi perpekto ang lahat. Nakikita ko lahat ‘yon. At sana alam mo kung gaano akong nagpapasalamat sa Diyos dahil binigyan niya ako ng pagkakataong mahalin ka.
+Salamat din sa mga sakripisyo mo na hindi mo na kailangang ipaliwanag. Sa mga pagkakataong ikaw ang umuunawa kahit hindi kompleto at magulo ang paliwanag ko, sa mga oras na ikaw ang gumagawa ng paraan para lang magkasundo tayo, at sa mga bigat na tahimik mong binubuhat para lang maging maayos tayo. Hindi ko man palaging nasasabi, pero ramdam na ramdam ko lahat ng ‘yon.
 
-Salamat din sa mga sakripisyo mo na hindi mo na kailangang ipaliwanag. Ikaw ang naging pahinga ko sa gitna ng magulong mundo. Sa dami ng ingay sa paligid, ikaw yung tahimik na parte na nagpapakalma sa akin. 
+Ikaw ang naging pahinga ko sa gitna ng magulong mundo. Sa dami ng ingay sa paligid, ikaw yung tahimik na parte na nagpapakalma sa akin. Kapag naiisip kita, parang humihinto saglit ang lahat at nagiging payapa. Hindi na ako naghahanap ng kung saan-saan para maramdaman ang “tahanan,” kasi sa’yo ko na nararamdaman ‘yon, sa boses mo, sa presensya mo, sa pagmamahal mo.
 
-At gusto kong malaman mo ito nang malinaw, mahal kita sa paraang hindi nauubos. Nananatili kahit tahimik, kahit pagod, kahit hindi perpekto ang lahat. Yung klase ng pagmamahal na walang dulo. Walang dulo, Alexandrine. Walang dulo. Mahal na mahal kita. :)`;
+At gusto kong malaman mo ito nang malinaw, mahal kita sa paraang hindi nauubos. Hindi ‘yung pagmamahal na pansamantala lang, hindi ‘yung nawawala kapag mahirap na, kundi ‘yung nananatili kahit tahimik, kahit pagod, kahit hindi perpekto ang lahat. Yung klase ng pagmamahal na walang dulo. Walang dulo, Alexandrine. Walang dulo. Mahal na mahal kita. :)`;
 
     let charIdx = 0;
     function typeLetter() {
         const el = document.getElementById('letter-content');
-        if (charIdx < fullMessage.length) {
-            el.textContent += fullMessage.charAt(charIdx);
+        if (charIdx < message.length) {
+            el.innerHTML += message.charAt(charIdx) === "\n" ? "<br>" : message.charAt(charIdx);
             charIdx++;
-            setTimeout(typeLetter, 30);
+            setTimeout(typeLetter, 40);
         }
     }
 
+    // Custom Cursor Trail Logic (Now uses your Pixel Heart)
     window.addEventListener('mousemove', (e) => {
         const h = document.createElement('img');
-        h.src = "https://i.imgur.com/vHInIu7.png";
+        // Custom Trail Image (Pixel Heart from prompt)
+        h.src = pixelHeartImg; 
         h.className = 'cursor-heart';
-        h.style.left = e.clientX + 'px'; h.style.top = e.clientY + 'px';
+        h.style.left = e.clientX + 'px';
+        h.style.top = e.clientY + 'px';
         document.body.appendChild(h);
         setTimeout(() => h.remove(), 700);
     });
