@@ -129,9 +129,9 @@
 </section>
 
 <section id="stage3" class="section">
-    <h1 style="font-family:'Poppins'; font-weight:600;">Catch 5 Moving Hearts! ✨</h1>
+    <h1 style="font-family:'Poppins'; font-weight:600;">Catch one more! ✨</h1>
     <div id="game-container"></div>
-    <h2 id="score-text" style="margin-top:20px;">Score: 0</h2>
+    <h2 id="score-text" style="margin-top:20px;">Score: 59</h2>
 </section>
 
 <section id="stage4" class="section">
@@ -146,7 +146,7 @@
     const audio = document.getElementById("myAudio");
 
     function startEverything() {
-        audio.play().catch(err => console.log("Music blocked until this click!"));
+        audio.play().catch(err => console.log("Music blocked until click"));
         nextStage(2);
         setTimeout(() => document.getElementById('pol1').classList.add('slide-out-1'), 800);
         setTimeout(() => document.getElementById('pol2').classList.add('slide-out-2'), 2000);
@@ -178,16 +178,23 @@
     }
     setInterval(createParticle, 500);
 
-    let score = 0;
+    // SCORE SET TO 59
+    let score = 59;
     function startHeartGame() {
         const container = document.getElementById('game-container');
         function spawn() {
-            if (score >= 5) { nextStage(4); return; }
+            // FINISHES GAME AT 60
+            if (score >= 60) { nextStage(4); return; }
             const h = document.createElement('img');
             h.src = "photo5.png"; h.className = 'game-heart';
             h.style.left = Math.random() * 70 + 15 + '%';
             h.style.top = Math.random() * 70 + 15 + '%';
-            h.onclick = () => { score++; document.getElementById('score-text').innerText = "Score: " + score; h.remove(); spawn(); };
+            h.onclick = () => { 
+                score++; 
+                document.getElementById('score-text').innerText = "Score: " + score; 
+                h.remove(); 
+                spawn(); 
+            };
             container.appendChild(h);
         }
         spawn();
