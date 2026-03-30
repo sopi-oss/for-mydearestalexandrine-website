@@ -20,8 +20,12 @@
             background-color: var(--cream);
             color: var(--text-brown);
             overflow-x: hidden;
+            /* Using photo5.png as the cursor */
             cursor: url('photo5.png'), auto;
         }
+
+        /* Hidden YouTube Music Player */
+        #yt-player { position: absolute; top: -9999px; left: -9999px; width: 1px; height: 1px; pointer-events: none; }
 
         .particle {
             position: fixed; top: -50px; z-index: 1;
@@ -47,7 +51,7 @@
             max-width: 320px; box-shadow: 0 10px 20px rgba(0,0,0,0.05);
         }
 
-        /* CAMERA STYLING */
+        /* Polaroid Camera Section */
         .camera-container {
             width: 300px; height: 180px; background: #333;
             border-radius: 20px 20px 5px 5px; position: relative;
@@ -67,7 +71,7 @@
         .slide-out-1 { opacity: 1; transform: translateY(260px) rotate(-5deg); z-index: 10; }
         .slide-out-2 { opacity: 1; transform: translateY(530px) rotate(5deg); z-index: 10; }
 
-        /* GAME STYLING */
+        /* Game Section */
         #game-container {
             width: 90%; max-width: 500px; height: 350px; position: relative;
             background: white; border-radius: 20px; border: 3px solid var(--soft-pink); overflow: hidden;
@@ -100,11 +104,11 @@
         @keyframes fadeOut { to { opacity: 0; transform: scale(0.5) translateY(-20px); } }
     </style>
 </head>
-<body onclick="forceAudio()">
+<body>
 
-<audio id="myAudio" loop preload="auto">
-    <source src="music.mp3" type="audio/mpeg">
-</audio>
+<div id="yt-player">
+    <iframe id="music-frame" src="https://www.youtube.com/embed/g78h7aPmq2Y?enablejsapi=1&autoplay=0&loop=1&playlist=g78h7aPmq2Y" allow="autoplay"></iframe>
+</div>
 
 <section id="stage1" class="section active">
     <img id="penguin" class="penguin-img" src="photo3.png">
@@ -142,17 +146,11 @@
 </section>
 
 <script>
-    const audio = document.getElementById("myAudio");
-
-    // FUNCTION TO FORCE AUDIO ON ANY CLICK
-    function forceAudio() {
-        if (audio.paused) {
-            audio.play().catch(e => console.log("Audio still waiting for interaction..."));
-        }
-    }
-
     function startEverything() {
-        forceAudio();
+        // Force Start Music
+        const frame = document.getElementById('music-frame');
+        frame.src += "&autoplay=1";
+        
         nextStage(2);
         setTimeout(() => document.getElementById('pol1').classList.add('slide-out-1'), 800);
         setTimeout(() => document.getElementById('pol2').classList.add('slide-out-2'), 2000);
@@ -184,7 +182,7 @@
     }
     setInterval(createParticle, 500);
 
-    // SCORE LOGIC: START 0, END 59
+    // Score Goal: 59
     let score = 0;
     function startHeartGame() {
         const container = document.getElementById('game-container');
@@ -203,12 +201,12 @@
             container.appendChild(h);
         }
         spawn();
-        // Spawn an extra one every few seconds just in case she misses one
-        setInterval(() => { if(score < 59 && container.children.length < 3) spawn(); }, 3000);
+        // Fallback spawn
+        setInterval(() => { if(score < 59 && container.children.length < 2) spawn(); }, 2000);
     }
 
     const message = `Mahal kong Alexandrine,
-    
+
 Dalawang buwan na ang lumipas, pero pakiramdam ko parang araw-araw pa rin akong nahuhulog sa’yo sa paraang hindi maingay, hindi pilit, kundi dahan-dahan at totoo. Habang tumatagal, mas lalo kitang nakikilala, at mas lalo ring lumalalim ang nadarama ko sa’yo. Hindi na ito simpleng nadarama lang, kundi isang desisyong paulit-ulit kong pinipili araw-araw: ikaw.
 
 Salamat sa pagmamahal mo na hindi laging sinisigaw, pero laging nararamdaman. Sa mga maliliit mong ginagawa na madalas hindi napapansin ng iba pero sobrang laki para sa akin. Sa pagtingin mo sa akin kahit pagod ka na, sa pasensya mo kahit minsan hindi ako madaling intindihin, at sa pagpili mong manatili kahit hindi perpekto ang lahat. Nakikita ko lahat ‘yon. At sana alam mo kung gaano akong nagpapasalamat sa Diyos dahil binigyan niya ako ng pagkakataong mahalin ka sa buhay na ito.
@@ -229,6 +227,7 @@ At gusto kong malaman mo ito nang malinaw, mahal kita sa paraang hindi nauubos. 
         }
     }
 
+    // Mouse heart trail
     window.addEventListener('mousemove', (e) => {
         const h = document.createElement('img');
         h.src = "photo5.png"; h.className = 'cursor-trail';
