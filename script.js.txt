@@ -1,0 +1,110 @@
+/* 🎬 ENTER SITE */
+function enterSite() {
+  document.getElementById("intro").style.display = "none";
+  document.getElementById("main").style.display = "block";
+}
+
+/* 💌 LETTER TYPING */
+function openLetter(type) {
+  let text = "";
+
+  if (type === "sad") text = "Hey love... I'm always here for you.";
+  if (type === "miss") text = "I miss you more than words can explain.";
+  if (type === "happy") text = "Seeing you happy makes me complete.";
+
+  let i = 0;
+  let letter = document.getElementById("letter");
+  letter.innerHTML = "";
+
+  function type() {
+    if (i < text.length) {
+      letter.innerHTML += text.charAt(i);
+      i++;
+      setTimeout(type, 30);
+    }
+  }
+
+  type();
+}
+
+/* 🎮 MOVING HEART GAME */
+let heart = document.getElementById("heart");
+
+function moveHeart() {
+  let x = Math.random() * window.innerWidth;
+  let y = Math.random() * window.innerHeight;
+
+  heart.style.left = x + "px";
+  heart.style.top = y + "px";
+}
+
+setInterval(moveHeart, 1000);
+
+heart.addEventListener("click", () => {
+  alert("You caught my heart 💖");
+});
+
+/* ❤️ BOUQUET */
+function showBouquet() {
+  document.getElementById("bouquet").innerHTML =
+    "🌸🌷🌹💐🌺<br>For you, always 💖";
+}
+
+/* 🎵 MUSIC */
+function playMusic() {
+  document.getElementById("bgMusic").play();
+}
+
+/* ✨ SCROLL ANIMATION */
+window.addEventListener("scroll", () => {
+  document.querySelectorAll(".fade").forEach(el => {
+    let top = el.getBoundingClientRect().top;
+    if (top < window.innerHeight - 50) {
+      el.classList.add("show");
+    }
+  });
+});
+
+/* 🌌 STARS BACKGROUND */
+const canvas = document.getElementById("stars");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let stars = [];
+
+for (let i = 0; i < 100; i++) {
+  stars.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    size: Math.random() * 2
+  });
+}
+
+function drawStars() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "white";
+
+  stars.forEach(star => {
+    ctx.fillRect(star.x, star.y, star.size, star.size);
+  });
+
+  requestAnimationFrame(drawStars);
+}
+
+drawStars();
+
+/* 💖 CURSOR HEART TRAIL */
+document.addEventListener("mousemove", function(e) {
+  let heart = document.createElement("div");
+  heart.innerHTML = "💖";
+  heart.style.position = "fixed";
+  heart.style.left = e.clientX + "px";
+  heart.style.top = e.clientY + "px";
+  heart.style.pointerEvents = "none";
+
+  document.body.appendChild(heart);
+
+  setTimeout(() => heart.remove(), 500);
+});

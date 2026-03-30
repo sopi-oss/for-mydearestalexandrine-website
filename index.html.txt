@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>For You 💖</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<canvas id="stars"></canvas>
+
+<!-- 🎬 INTRO -->
+<div id="intro">
+  <h1>For You 💖</h1>
+  <button onclick="enterSite()">Enter</button>
+</div>
+
+<!-- 🌙 MAIN -->
+<div id="main">
+
+<section class="fade">
+  <h2>💌 Open When...</h2>
+  <button onclick="openLetter('sad')">When you're sad</button>
+  <button onclick="openLetter('miss')">When you miss me</button>
+  <button onclick="openLetter('happy')">When you're happy</button>
+  <div id="letter"></div>
+</section>
+
+<section class="fade">
+  <h2>🎮 Catch My Heart</h2>
+  <div id="heart">💖</div>
+</section>
+
+<section class="fade">
+  <h2>📷 Our Memories</h2>
+  <div class="polaroid">
+    <img src="photo1.jpg">
+    <p>Our first memory 💖</p>
+  </div>
+  <div class="polaroid">
+    <img src="photo2.jpg">
+    <p>You + Me 🥺</p>
+  </div>
+</section>
+
+<section class="fade">
+  <button onclick="showBouquet()">Do not click 😳</button>
+  <div id="bouquet"></div>
+</section>
+
+<section class="fade">
+  <button onclick="playMusic()">Play our song 🎵</button>
+</section>
+
+</div>
+
+<audio id="bgMusic" loop>
+  <source src="music.mp3">
+</audio>
+
+<script src="script.js"></script>
+
+</body>
+</html>
