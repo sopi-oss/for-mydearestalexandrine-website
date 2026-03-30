@@ -20,10 +20,10 @@
             background-color: var(--cream);
             color: var(--text-brown);
             overflow-x: hidden;
-            /* CURSOR: photo5.png lowercase */
             cursor: url('photo5.png'), auto;
         }
 
+        /* FALLING BACKGROUND */
         .particle {
             position: fixed; top: -50px; z-index: 1;
             pointer-events: none; animation: fall linear forwards;
@@ -48,34 +48,41 @@
             max-width: 320px; box-shadow: 0 10px 20px rgba(0,0,0,0.05);
         }
 
+        /* CAMERA */
         .camera-container {
             width: 300px; height: 180px; background: #333;
             border-radius: 20px 20px 5px 5px; position: relative;
             border-bottom: 10px solid #222; margin-top: 50px;
         }
         .camera-lens {
-            width: 70px; height: 70px; background: #444;
-            border: 5px solid #555; border-radius: 50%;
+            width: 70px; height: 70px; background: #444; border: 5px solid #555; border-radius: 50%;
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
         }
         .photo-slot { width: 240px; height: 8px; background: #111; position: absolute; bottom: -4px; left: 30px; }
         .polaroid {
-            background: white; padding: 10px 10px 30px 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            position: absolute; bottom: 0; left: 40px;
-            opacity: 0; transition: transform 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.5s;
-            z-index: -1;
+            background: white; padding: 10px 10px 30px 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            position: absolute; bottom: 0; left: 40px; opacity: 0; 
+            transition: transform 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.5s; z-index: -1;
         }
         .polaroid img { width: 200px; height: 240px; object-fit: cover; }
         .slide-out-1 { opacity: 1; transform: translateY(260px) rotate(-5deg); z-index: 10; }
         .slide-out-2 { opacity: 1; transform: translateY(530px) rotate(5deg); z-index: 10; }
 
+        /* GAME ELEMENTS */
         #game-container {
             width: 90%; max-width: 500px; height: 350px; position: relative;
             background: white; border-radius: 20px; border: 3px solid var(--soft-pink); overflow: hidden;
         }
-        /* GAME HEART: photo5.png lowercase */
-        .game-heart { position: absolute; width: 45px; cursor: pointer; }
+        .game-heart { 
+            position: absolute; width: 50px; cursor: pointer;
+            animation: floatAround 3s infinite ease-in-out; 
+        }
+        @keyframes floatAround {
+            0%, 100% { transform: translate(0, 0); }
+            25% { transform: translate(20px, -30px); }
+            50% { transform: translate(-20px, 20px); }
+            75% { transform: translate(30px, 10px); }
+        }
 
         .btn { padding: 15px 35px; border-radius: 50px; border: none; cursor: pointer; font-weight: 600; transition: 0.3s; font-family: 'Poppins'; }
         .btn-yes { background: var(--valentine-red); color: white; }
@@ -112,8 +119,7 @@
 <section id="stage2" class="section">
     <h1 style="font-family:'Dancing Script'; font-size:3.5rem; color:var(--valentine-red);">Our Moments 📸</h1>
     <div class="camera-container">
-        <div class="camera-lens"></div>
-        <div class="photo-slot"></div>
+        <div class="camera-lens"></div><div class="photo-slot"></div>
         <div id="pol1" class="polaroid"><img src="photo1.jpg"></div>
         <div id="pol2" class="polaroid"><img src="photo2.jpg"></div>
     </div>
@@ -123,7 +129,7 @@
 </section>
 
 <section id="stage3" class="section">
-    <h1 style="font-family:'Poppins'; font-weight:600;">Catch 5 Moving Items! ✨</h1>
+    <h1 style="font-family:'Poppins'; font-weight:600;">Catch 5 Moving Hearts! ✨</h1>
     <div id="game-container"></div>
     <h2 id="score-text" style="margin-top:20px;">Score: 0</h2>
 </section>
@@ -140,7 +146,7 @@
     const audio = document.getElementById("myAudio");
 
     function startEverything() {
-        audio.play().catch(err => console.log("Audio waiting..."));
+        audio.play().catch(err => console.log("Music blocked until this click!"));
         nextStage(2);
         setTimeout(() => document.getElementById('pol1').classList.add('slide-out-1'), 800);
         setTimeout(() => document.getElementById('pol2').classList.add('slide-out-2'), 2000);
@@ -155,7 +161,6 @@
     }
 
     function sadPenguin() {
-        /* SAD PENGUIN: photo4.png lowercase */
         document.getElementById('penguin').src = "photo4.png";
         document.getElementById('penguin-text').innerText = "Oh... pinapaiyak mo naman ang penguin. ☹️";
         document.getElementById('no-btn').innerText = "Sige na nga, Yes na!";
@@ -164,9 +169,7 @@
 
     function createParticle() {
         const p = document.createElement('img');
-        /* FALLING: photo5.png lowercase */
-        p.src = "photo5.png"; 
-        p.className = 'particle';
+        p.src = "photo5.png"; p.className = 'particle';
         p.style.left = Math.random() * 100 + 'vw';
         p.style.width = (Math.random() * 20 + 15) + 'px';
         p.style.animationDuration = (Math.random() * 3 + 4) + 's';
@@ -181,17 +184,10 @@
         function spawn() {
             if (score >= 5) { nextStage(4); return; }
             const h = document.createElement('img');
-            /* GAME HEART: photo5.png lowercase */
-            h.src = "photo5.png"; 
-            h.className = 'game-heart';
-            h.style.left = Math.random() * 80 + 10 + '%';
-            h.style.top = Math.random() * 80 + 10 + '%';
-            h.onclick = () => { 
-                score++; 
-                document.getElementById('score-text').innerText = "Score: " + score; 
-                h.remove(); 
-                spawn(); 
-            };
+            h.src = "photo5.png"; h.className = 'game-heart';
+            h.style.left = Math.random() * 70 + 15 + '%';
+            h.style.top = Math.random() * 70 + 15 + '%';
+            h.onclick = () => { score++; document.getElementById('score-text').innerText = "Score: " + score; h.remove(); spawn(); };
             container.appendChild(h);
         }
         spawn();
@@ -219,11 +215,9 @@ At gusto kong malaman mo ito nang malinaw, mahal kita sa paraang hindi nauubos. 
         }
     }
 
-    /* MOUSE TRAIL: photo5.png lowercase */
     window.addEventListener('mousemove', (e) => {
         const h = document.createElement('img');
-        h.src = "photo5.png";
-        h.className = 'cursor-trail';
+        h.src = "photo5.png"; h.className = 'cursor-trail';
         h.style.left = e.clientX + 'px'; h.style.top = e.clientY + 'px';
         document.body.appendChild(h);
         setTimeout(() => h.remove(), 700);
